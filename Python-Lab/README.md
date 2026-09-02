@@ -44,6 +44,19 @@ logfire.instrument_httpx()    # captures Groq calls (groq SDK has no dedicated i
 
 View traces at [logfire.pydantic.dev](https://logfire.pydantic.dev/).
 
+## 🔧 Tools
+
+Three ways to give a model access to tools, from most to least manual — see
+[`fundamentals/`](fundamentals):
+
+| Approach | File | Tool-call loop |
+|---|---|---|
+| `ChatGroq` (provider class) + `bind_tools()` | `fundamentals/tools_ChatModel_api.py` | Manual |
+| `init_chat_model()` + `bind_tools()` | `fundamentals/tools_InitChatModel_api.py` | Manual |
+| `create_agent(tools=[...])` | `fundamentals/tools_CreateAgent_api.py` | Automatic |
+
+See [`TOOL_README.md`](TOOL_README.md)
+
 ## ⚡ Quickstart
 
 ```bash
