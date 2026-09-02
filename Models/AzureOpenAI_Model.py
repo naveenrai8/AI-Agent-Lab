@@ -1,12 +1,18 @@
 from dotenv import load_dotenv
 from common.load_env import load_env_variables
+from common.logger_wrapper import configure_logfire
+
+from langchain_core.language_models import BaseChatModel
+
 
 import os
 
-load_env_variables()
+logfire = configure_logfire()
 
 
-def inference_using_azure_openai():
+def init_azure_openai_model() -> BaseChatModel:
+    global logfire
+    logfire.instrument_openai()
 
     from langchain_openai import AzureChatOpenAI
 
@@ -17,11 +23,17 @@ def inference_using_azure_openai():
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
         api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
     )
-    print(model.model_dump_json)
+    return model
 
-    response = model.invoke("What is AI. Explain in 2 statements")
-    print(response.pretty_print())
+
+def inference_azure_openai(model: BaseChatModel, query: str):
+
+    response = model.invoke(query)
+    return response
 
 
 if __name__ == "__main__":
-    inference_using_azure_openai()
+    with logfire.span("AzureOpenAI"):
+        model = init_azure_openai_model()
+        response = inference_azure_openai(model=model, query="Where is India?")
+        print(response.pretty_print())

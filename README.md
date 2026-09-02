@@ -25,6 +25,25 @@ Each file in [`Models/`](Models) wires up a single provider through LangChain's 
 
 Adding a new provider? Drop a new `<Provider>_Model.py` file in `Models/`, following the same shape: load env vars, construct the chat model, `model.invoke(...)`.
 
+## 🔭 Observability
+
+Traces and LLM call logs are sent to [Pydantic Logfire](https://pydantic.dev/logfire) — a single `logfire.configure()` + `logfire.instrument_pydantic_ai()`/auto-instrumentation call captures every model invocation (prompts, tokens, latency, errors) with no changes to the model scripts themselves.
+
+```bash
+uv run logfire auth        # one-time: authenticate this machine
+uv run logfire projects use <project-name>
+```
+
+```python
+import logfire
+
+logfire.configure()
+logfire.instrument_openai()   # captures Azure OpenAI calls (langchain-openai wraps the openai SDK)
+logfire.instrument_httpx()    # captures Groq calls (groq SDK has no dedicated instrumentor; httpx is its transport)
+```
+
+View traces at [logfire.pydantic.dev](https://logfire.pydantic.dev/).
+
 ## ⚡ Quickstart
 
 ```bash
@@ -38,3 +57,5 @@ Credentials are loaded via [`common/load_env.py`](common/load_env.py) from `[loc
 
 - Python `>=3.13`
 - `uv` for dependency management (`uv.lock` is checked in)
+
+

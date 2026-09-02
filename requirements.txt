@@ -3,3 +3,5 @@ ipykernel
 langchain-groq
 langchain
 langchain_openai
+logfire
+logfire[httpx]

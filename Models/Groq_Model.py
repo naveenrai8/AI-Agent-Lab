@@ -1,22 +1,35 @@
 from dotenv import load_dotenv
 from common.load_env import load_env_variables
+from langchain_core.language_models import BaseChatModel
+
+from common.logger_wrapper import configure_logfire
 
 import os
 
-load_env_variables()
+logfire = configure_logfire()
+logfire.instrument_httpx()
 
 
-def inference_using_groq_provider(model_name: str):
+def init_groq_provider(model_name: str) -> BaseChatModel:
 
     from langchain_groq import ChatGroq
 
-    print(os.getenv("GROQ_API_KEY"))
     model = ChatGroq(model=model_name, api_key=os.getenv("GROQ_API_KEY"))
-    print(model.model_dump_json)
+    return model
+
+
+def inference_groq_model(model: BaseChatModel) -> str:
 
     response = model.invoke("What is AI. Explain in 2 statements")
-    print(response.pretty_print())
+    logfire.info(
+        "Groq inference response",
+        content=response.content,
+        # usage=response.usage_metadata,
+    )
+    return response
 
 
 if __name__ == "__main__":
-    inference_using_groq_provider("qwen/qwen3.6-27b")
+    model = init_groq_provider("qwen/qwen3.8-27b")
+    response = inference_groq_model(model=model)
+    print(response)
