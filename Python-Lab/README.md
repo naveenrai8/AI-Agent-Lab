@@ -72,3 +72,5 @@ Credentials are loaded via [`common/load_env.py`](common/load_env.py) from `[loc
 - `uv` for dependency management (`uv.lock` is checked in)
 
 
+## References
+1. [Langchain Structured output](https://docs.langchain.com/oss/python/langchain/structured-output)
