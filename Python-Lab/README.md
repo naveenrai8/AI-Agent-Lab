@@ -57,6 +57,18 @@ Three ways to give a model access to tools, from most to least manual — see
 
 See [`TOOL_README.md`](TOOL_README.md)
 
+## 📐 Structured Output
+
+Two ways to constrain a `create_agent` response to a schema instead of free-form text — see
+[`fundamentals/`](fundamentals):
+
+| Approach | File | Schema style |
+|---|---|---|
+| `pydantic.BaseModel` + `Field(description=...)` | `fundamentals/structured_output_pydantic.py` | Class with typed fields, descriptions via `Field` |
+| `typing_extensions.TypedDict` + `Annotated` | `fundamentals/structured_output_typedict.py` | Dict-shaped type, descriptions via `Annotated[type, ..., "desc"]` |
+
+Both pass the schema as `response_format=UserInfo` to `create_agent(...)`; the agent's `.invoke()` result comes back matching that shape instead of a plain message string.
+
 ## ⚡ Quickstart
 
 ```bash
