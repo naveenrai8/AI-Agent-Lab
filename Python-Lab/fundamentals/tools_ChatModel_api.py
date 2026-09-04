@@ -1,4 +1,4 @@
-from fundamentals.Model_Groq_api import init_groq_provider
+from model_Groq_api import init_groq_provider
 from langchain_core.tools import tool
 from common.logger_wrapper import configure_logfire
 from langchain_core.messages import SystemMessage, HumanMessage, ToolMessage
@@ -44,6 +44,7 @@ def call_tools(model_name: str, query: str):
 
     final_response = model.invoke(conversation)
     logfire.info("Final Response", content=final_response)
+    print(final_response.content)
 
 
 if __name__ == "__main__":
