@@ -49,4 +49,4 @@ def call_tools(model_name: str, query: str):
 
 if __name__ == "__main__":
     with logfire.span("chat_model_tools"):
-        call_tools("qwen/qwen3.6-27b", "Whats weather in Bengaluru")
+        call_tools("qwen/qwen3.8-27b", "Whats weather in Bengaluru")
